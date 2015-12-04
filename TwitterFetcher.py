@@ -36,7 +36,7 @@ class TwitterFetcher(object):
         followings = []
         for user in tweepy.Cursor(self.twitter_connection.twitter_api.friends, user_id=twitter_id).items():
             twitter_user = TwitterUser()
-            twitter_user.name = user.nameT
+            twitter_user.name = user.name
             twitter_user.twitter_id = user.id
             twitter_user.username = user.screen_name
             followings.append(twitter_user)
@@ -55,7 +55,7 @@ class TwitterFetcher(object):
                     tweet.text = fav.text
                     tweet.target_id = fav.author.id
                     favorites.append(tweet)
-                    if(len(favorites) == 100):
+                    if len(favorites) == 100:
                         print("break")
                         break
         except:
@@ -82,25 +82,26 @@ class TwitterFetcher(object):
 
     def get_retweets(self, twitter_id):
         retweets = []
-        for i in range(1, 30):
+        for i in range(1, 50):
+            print(len(retweets))
             stuff = self.twitter_connection.twitter_api.user_timeline(id=twitter_id, page=i)
+            if len(retweets) is 100:
+                    break
             for tw in stuff:
                 tweet = Tweet()
                 if tw.text[0] is "R" and tw.text[1] is "T":
                     author = tw.text[4:len(tw.text)].split(':')[0]
                     try:
                         author_id = self.twitter_connection.twitter_api.get_user(screen_name=author).id
-                        print(author + ": " + str(author_id) )
                         tweet.source_id = twitter_id
                         tweet.target_id = author_id
                         tweet.text = tw.text
                         retweets.append(tweet)
                     except:
                         pass
-
-                if len(retweets) is 50:
+                if len(retweets) is 100:
                     break
-            if len(retweets) is 50:
+            if len(retweets) is 100:
                 break
         return retweets
 
