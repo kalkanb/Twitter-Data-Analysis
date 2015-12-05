@@ -14,30 +14,14 @@ class TwitterAnalyzer:
             for following in followings:
                 if follower.twitter_id == following.twitter_id:
                     intersection += 1
-
-        print("followers: " + str(len(followers)))
-        print("followings: " + str(len(followings)))
-        print("intersect: " + str(intersection))
         return intersection
     # end of get_...
 
     def get_post_days(self, tweets):
-        days = {"monday": 0, "tuesday": 0, "wednesday": 0, "thursday": 0, "friday": 0, "saturday": 0, "sunday": 0}
+        days = [0, 0, 0, 0, 0, 0, 0]
         for tweet in tweets:
-            if datetime.datetime.weekday(tweet.created_at) is 0:
-                days["sunday"] = days["sunday"] + 1
-            elif datetime.datetime.weekday(tweet.created_at) is 1:
-                days["monday"] = days["monday"] + 1
-            elif datetime.datetime.weekday(tweet.created_at) is 2:
-                days["tuesday"] = days["tuesday"] + 1
-            elif datetime.datetime.weekday(tweet.created_at) is 3:
-                days["wednesday"] = days["wednesday"] + 1
-            elif datetime.datetime.weekday(tweet.created_at) is 4:
-                days["thursday"] = days["thursday"] + 1
-            elif datetime.datetime.weekday(tweet.created_at) is 5:
-                days["friday"] = days["friday"] + 1
-            elif datetime.datetime.weekday(tweet.created_at) is 6:
-                days["saturday"] = days["saturday"] + 1
+            day = datetime.datetime.weekday(tweet.created_at)
+            days[day] = days[day] + 1
         return days
     # end of get...
 
@@ -52,7 +36,6 @@ class TwitterAnalyzer:
     def get_most_favorited(self, favorites):
         all_favorites = {}
         for favorite in favorites:
-            print(all_favorites)
             if str(favorite.target_id) in all_favorites.keys():
                 all_favorites[str(favorite.target_id)] += 1
             else:
@@ -63,10 +46,12 @@ class TwitterAnalyzer:
         favorite_numbers = []
 
         for i in range(0, 10):
-            user = self.twitter_fetcher.get_twitter_user(twitter_id=sorted_list[i])
-            users.append(user)
-            favorite_numbers.append(all_favorites[sorted_list[i]])
-
+            try:
+                user = self.twitter_fetcher.get_twitter_user(twitter_id=sorted_list[i])
+                users.append(user)
+                favorite_numbers.append(all_favorites[sorted_list[i]])
+            except:
+                break
         return_dict = {"favorite_users": users, "favorite_numbers": favorite_numbers}
 
         return return_dict
@@ -75,7 +60,6 @@ class TwitterAnalyzer:
 
         all_retweeteds = {}
         for retweet in retweets:
-            print(all_retweeteds)
             if str(retweet.target_id) in all_retweeteds.keys():
                 all_retweeteds[str(retweet.target_id)] += 1
             else:
@@ -86,10 +70,12 @@ class TwitterAnalyzer:
         retweeted_numbers = []
 
         for i in range(0, 10):
-            user = self.twitter_fetcher.get_twitter_user(twitter_id=sorted_list[i])
-            users.append(user)
-            retweeted_numbers.append(all_retweeteds[sorted_list[i]])
-
+            try:
+                user = self.twitter_fetcher.get_twitter_user(twitter_id=sorted_list[i])
+                users.append(user)
+                retweeted_numbers.append(all_retweeteds[sorted_list[i]])
+            except:
+                break
         return_dict = {"retweeted_users": users, "retweeted_numbers": retweeted_numbers}
 
         return return_dict
