@@ -1,12 +1,9 @@
 __author__ = 'Miraç Aknar'
 from TwittterFacade import TwitterFacade
-from TwitterFetcher import TwitterFetcher
-
-
 tf = TwitterFacade()
 
 
-results = tf.do_all("HusamettinBalta")
+results = tf.do_all("halloga")
 
 
 str1 = "the user: " + results[0].username
@@ -15,9 +12,6 @@ str1 += "\n followings count: " + str(results[1]["followings_count"])
 str1 += "\n intersection: " + str(results[1]["intersection"])
 str1 += "\n"
 
-print("*********************************")
-print(str1)
-print("*********************************")
 
 str1 += "\n hours: "
 for i in range(0, 24):
@@ -35,9 +29,6 @@ str1 += "\nsunday:" + str(results[2]["days"][0])
 
 
 
-print("*********************************")
-print(str1)
-print("*********************************")
 
 str1 += "\n"
 
@@ -52,9 +43,7 @@ for i in range(0, 10):
     except:
         break
 
-print("*********************************")
-print(str1)
-print("*********************************")
+
 
 str1 += "\n retweets:"
 
@@ -68,7 +57,5 @@ for i in range(0, 10):
 
 
 
-
-print(str1)
 
 

@@ -30,10 +30,6 @@ class TwitterConnection:
         self.consumer_secret = self.consumer_secrets[0]
         self.access_token = self.access_tokens[0]
         self.access_token_secret = self.access_tokens_secrets[0]
-
-
-
-
         self.auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
         self.auth.set_access_token(self.access_token, self.access_token_secret)
         self.twitter_api = tweepy.API(self.auth)

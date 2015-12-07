@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Twitter Analyzer</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<header>
+<div class="container" style="width:100%">
+	<div class="navbar-header">
+      <a class="navbar-brand" href="/">
+	  <img style="max-width:160px; margin-top: -7px;" src="{{ url_for('static', filename='images/logo.png') }}">
+	  </a>
+    </div>
+<div>
+</header>
+<div class="border-row" style="width:100%; margin-top: 3px; border-style: solid;
+    border-bottom: 2px; border-color: #999;"> </div>
+
+<body>
+
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	
+	
+	<div class="panel panel-default" style="width:50%; min-width:400px; max-width: 700px; margin: 100px auto 0px auto; border-style: solid;
+    border-width: 2px; border-color: #999;
+	-webkit-box-shadow: 0px 0px 42px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 42px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 42px 0px rgba(0,0,0,0.75);">
+		
+		<div class="panel-body" >
+			<p style="font-size: 150%; display: block; text-align: center;" ;>Type a username to see its statistics </p>
+			
+			
+			<div class="input-group" style="max-width: 400px; margin: 20px auto 20px auto" >
+			<input type="text" class="form-control" placeholder="Usarname">
+				<span class="input-group-btn">
+					<a href="/statistics">
+					<button class="btn btn-default" type="button">Analyze!</button>
+					<a/>
+				</span>
+			</div><!-- /input-group -->
+		</div>
+	</div>
+</body>
+
+</html>

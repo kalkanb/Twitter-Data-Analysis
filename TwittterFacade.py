@@ -19,18 +19,27 @@ class TwitterFacade:
         followings = self.twitter_fetcher.get_followings(the_user.twitter_id)
 
         print("followings created")
-        tweets = self.twitter_fetcher.get_tweets(the_user.twitter_id)
+        tweets = self.twitter_fetcher.get_tweets(is_retweet=False, twitter_id=the_user.twitter_id)
+
+        i = 0
+        print(len(tweets))
+        for tw in tweets:
+            print(str(i) + " " + tw.text)
+            i += 1
 
 
         print("tweets created")
-        retweets = self.twitter_fetcher.get_retweets(the_user.twitter_id)
+        retweets = self.twitter_fetcher.get_tweets(is_retweet=True, twitter_id=the_user.twitter_id)
+
+        i = 0
+        print(len(retweets))
+        for tw in retweets:
+            print(str(i) + " " + tw.text)
+            i += 1
         print("retweets created")
         i= 0
-        print(i)
-        for f in retweets:
-            print(str(i))
-            print(f)
-            i = i + 1
+        print()
+
         favorites = self.twitter_fetcher.get_favorites(the_user.twitter_id)
         print("favorites created")
 

@@ -28,6 +28,26 @@ class TwitterFetcher(object):
     # end of get_twitter_user
 
     def get_followers(self, twitter_id):
+        the_user = self.get_twitter_user(twitter_id=twitter_id)
+        if the_user.follower_count > 400:
+            followers = self.get_followers_big(twitter_id=twitter_id)
+        else:
+            followers = self.get_followers_small(twitter_id=twitter_id)
+
+        return followers
+
+    def get_followings(self, twitter_id):
+        the_user = self.get_twitter_user(twitter_id=twitter_id)
+        if the_user.following_count > 400:
+            followings = self.get_followings_big(twitter_id=twitter_id)
+        else:
+            followings = self.get_followings_small(twitter_id=twitter_id)
+
+        return followings
+
+
+
+    def get_followers_small(self, twitter_id):
 
         followers = []
         followersapi = None
@@ -47,13 +67,39 @@ class TwitterFetcher(object):
             except:
                 self.twitter_connection.change_connection_keys()
 
+        return followers
+    # end of get_small_followers
 
+    def get_followers_big(self, twitter_id):
+        followers = []
 
+        ids = None
+        check1 = True
+        while check1:
+            try:
+                print("denedik")
+                ids = self.twitter_connection.twitter_api.followers_ids(twitter_id)
+                print("denedik oldu")
+                check1 = False
+            except:
+                self.twitter_connection.change_connection_keys()
+
+        for id in ids:
+            check2 = True
+            while check2:
+                try:
+                    print(str(id))
+                    twitter_user =self.get_twitter_user(twitter_id=id)
+                    followers.append(twitter_user)
+                    print(twitter_user.username)
+                    check2= False
+                except:
+                    self.twitter_connection.change_connection_keys()
 
         return followers
-    # end of get_followers
 
-    def get_followings(self, twitter_id):
+
+    def get_followings_small(self, twitter_id):
 
         followings = []
         followingsapi = None
@@ -76,6 +122,41 @@ class TwitterFetcher(object):
 
         return followings
     # end of get_followings
+
+    def get_followings_big(self, twitter_id):
+        followings = []
+
+        ids = None
+        check1 = True
+        while check1:
+            try:
+                print("denedik")
+                ids = self.twitter_connection.twitter_api.frineds_id(twitter_id)
+                print("denedik oldu")
+                check1 = False
+            except:
+                self.twitter_connection.change_connection_keys()
+
+        for id in ids:
+            check2 = True
+            while check2:
+                try:
+                    print(str(id))
+                    twitter_user =self.get_twitter_user(twitter_id=id)
+                    followings.append(twitter_user)
+                    print(twitter_user.username)
+                    check2= False
+                except:
+                    self.twitter_connection.change_connection_keys()
+
+        return followings
+
+
+
+
+
+
+
 
     def get_favorites(self, twitter_id):
         favorites = []
@@ -103,6 +184,65 @@ class TwitterFetcher(object):
             return favorites
         return favorites
 
+
+    def get_tweets(self, is_retweet, twitter_id):
+        tweets = []
+        numberOfPage = None
+        checkstuff = 0
+
+        if is_retweet: # ordinary tweet
+            numberOfPage = 50
+
+        else:
+            numberOfPage = 20
+
+        for i in range(1, numberOfPage):
+            if checkstuff:
+                break
+
+            check1 = True
+            stuff = None
+
+            while check1:
+                try:
+                    stuff = self.twitter_connection.twitter_api.user_timeline(id=twitter_id, page=i)
+                    if len(tweets) > 100:
+                        break
+
+                    if len(stuff) == 0:
+                        checkstuff = True
+                        break
+
+                    for tw in stuff:
+                        tweet = Tweet()
+                        if is_retweet:
+                            if tw.text[0] is "R" and tw.text[1] is "T":
+                                author = tw.text[4:len(tw.text)].split(':')[0]
+                                try:
+                                    author_id = self.twitter_connection.twitter_api.get_user(screen_name=author).id
+                                    tweet.source_id = twitter_id
+                                    tweet.target_id = author_id
+                                    tweet.text = tw.text
+                                    tweets.append(tweet)
+
+                                except:
+                                    pass
+                        else:
+                            if tw.text[0] is not "R" and tw.text[1] is not "T":
+                                tweet.text = tw.text
+                                tweet.source_id = twitter_id
+                                tweet.target_id = 0
+                                tweet.created_at = tw.created_at
+                                tweets.append(tweet)
+
+
+                    check1 = False
+
+                except:
+                    self.twitter_connection.change_connection_keys()
+
+        return tweets
+""""
     def get_tweets(self, twitter_id):
 
         tweets = []
@@ -178,3 +318,4 @@ class TwitterFetcher(object):
 
 
 
+"""""
